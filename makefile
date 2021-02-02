@@ -9,7 +9,7 @@ PFILES = image.cpp x11_wrapper.cpp \
 all: main
 
 main: themilkman.cpp
-	g++ $(CFLAGS) $(PFILES) themilkman.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -othemilkman
+	g++ $(CFLAGS) $(PFILES) themilkman.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -othemilkman.out
 
 redo: main
 	./themilkman.out
