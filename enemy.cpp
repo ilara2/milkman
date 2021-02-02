@@ -4,6 +4,7 @@
 #include "global.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 extern Global* gl;
 GLuint Enemy::enemy_tex[8];
