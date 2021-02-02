@@ -4,7 +4,6 @@
 
 #include <GL/glx.h>
 #include "image.h"
-#include "nn/network.h"
 
 class Enemy {
 public:

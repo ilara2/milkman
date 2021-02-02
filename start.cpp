@@ -3,6 +3,7 @@
 #include "global.h"
 #include "displays.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 extern Global* gl;
 extern Displays* display;
