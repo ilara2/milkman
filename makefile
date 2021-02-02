@@ -12,7 +12,7 @@ main: themilkman.cpp
 	g++ $(CFLAGS) $(PFILES) themilkman.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -othemilkman
 
 redo: main
-	./themilkman
+	./themilkman.out
 
 clean:
-	rm -f themilkman
+	rm -f themilkman.out
