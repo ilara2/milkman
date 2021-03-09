@@ -2,8 +2,8 @@
 #ifndef BOTTLE_H_
 #define BOTTLE_H_
 
-#include "global.h"
-#include "image.h"
+#include "../utils/global.h"
+#include "../utils/image.h"
 #include <GL/glx.h>
 
 class Bottle {

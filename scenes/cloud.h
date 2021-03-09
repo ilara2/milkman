@@ -3,7 +3,7 @@
 #define CLOUD_H_
 
 #include <GL/glx.h>
-#include "image.h"
+#include "../utils/image.h"
 
 class Cloud {
 	int    xpos, ypos;

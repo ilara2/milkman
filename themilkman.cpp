@@ -1,11 +1,11 @@
 
 #include "themilkman.h"
-#include "global.h"
-#include "displays.h"
-#include "player.h"
-#include "enemy.h"
-#include "fonts.h"
-#include "x11_wrapper.h"
+#include "utils/global.h"
+#include "scenes/displays.h"
+#include "player/player.h"
+#include "enemy/enemy.h"
+#include "utils/fonts.h"
+#include "utils/x11_wrapper.h"
 #include <GL/glx.h>
 #include <X11/keysym.h>
 #include <stdio.h>

@@ -3,7 +3,6 @@
 #define THEMILKMAN_H_
 
 #include <X11/Xlib.h>
-// #include "player.h"
 
 void initOpengl();
 int checkKeys(XEvent *e);

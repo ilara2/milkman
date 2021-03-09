@@ -3,7 +3,7 @@
 #define DISPLAYS_H_
 
 // #include "themilkman.h"
-#include "global.h"
+#include "../utils/global.h"
 #include "scenes.h"
 
 class Displays {

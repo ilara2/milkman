@@ -1,6 +1,6 @@
 
 #include "cloud.h"
-#include "global.h"
+#include "../utils/global.h"
 #include <stdlib.h>
 
 extern Global* gl;

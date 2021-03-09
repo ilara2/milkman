@@ -2,11 +2,11 @@
 #ifndef SCENES_H_
 #define SCENES_H_
 
-#include "image.h"
+#include "../utils/image.h"
 #include <GL/glx.h>
 #include <vector>
-#include "player.h"
-#include "enemy.h"
+#include "../player/player.h"
+#include "../enemy/enemy.h"
 
 class Scenes {
 public:

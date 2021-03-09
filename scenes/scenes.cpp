@@ -1,6 +1,6 @@
 
 #include "scenes.h"
-#include "global.h"
+#include "../utils/global.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <algorithm>

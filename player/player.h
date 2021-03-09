@@ -3,8 +3,8 @@
 #define PLAYER_H_
 
 #include <GL/glx.h>
-#include "global.h"
-#include "image.h"
+#include "../utils/global.h"
+#include "../utils/image.h"
 #include "bottle.h"
 #include <vector>
 

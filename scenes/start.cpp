@@ -1,6 +1,6 @@
 
 #include "start.h"
-#include "global.h"
+#include "../utils/global.h"
 #include "displays.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "global.h"
-#include "player.h"
+#include "../player/player.h"
 
 extern Global* gl;
 
