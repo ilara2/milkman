@@ -31,9 +31,6 @@ public:
 	void throwBottle(attack_dir, int, int);
 	void update();
 	void checkBounds();
-	// void drawHitBox();
-	// void attack(int, int, int);
-	// void shatter();
 };
 
 #endif

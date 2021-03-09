@@ -144,15 +144,6 @@ void Enemy::standDraw() {
 }
 
 bool Enemy::cmp(Enemy a, Enemy b) {
-	// if (a.frame > b.frame) return false;
-	// if (a.frame < b.frame) return true;
-	// if (a.ypos < b.ypos) return false;
-	// if (a.ypos > b.ypos) return true;
-	// return false;
-	// if (a.frame == b.frame)
-	// 	return a.ypos > b.ypos;
-	// else return a.frame > b.frame;
-	// return a.frame > b.frame || a.ypos > b.ypos;
 	return a.ypos > b.ypos;
 }
 
@@ -320,32 +311,9 @@ void Enemy::Move(int x, int y) {
 }
 
 void Enemy::Attack() {
-	/*
-	GLuint texture;
-	if (fwd) texture = enemy_tex[8];
-	else texture = enemy_tex[9];
-
-	float inc = 0.125;
-	float start = inc * slice;
-	float   end = start + inc;
-
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glPushMatrix();
-	glTranslatef(xpos, ypos, 0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-	glBegin(GL_QUADS);
-		glTexCoord2f(start, 1); glVertex2i(-size,      0);
-		glTexCoord2f(  end, 1); glVertex2i( size,      0);
-		glTexCoord2f(  end, 0); glVertex2i( size, 2*size);
-		glTexCoord2f(start, 0); glVertex2i(-size, 2*size);
-	glEnd();
-	glPopMatrix();
-	glDisable(GL_ALPHA_TEST);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	* */
-	  mov = false;
+	// TODO
+	// 		implement attack for enemies
+	mov = false;
 	stood = true;
 }
 

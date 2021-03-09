@@ -2,7 +2,6 @@
 #ifndef DISPLAYS_H_
 #define DISPLAYS_H_
 
-// #include "themilkman.h"
 #include "../utils/global.h"
 #include "scenes.h"
 

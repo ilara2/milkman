@@ -9,7 +9,4 @@ int checkKeys(XEvent *e);
 void render();
 void physics();
 
-// enum stages {err, start, lvl_1, lvl_2, credits, control};
-// enum dir {err, up, down, left, right};
-
 #endif

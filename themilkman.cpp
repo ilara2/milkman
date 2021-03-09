@@ -16,12 +16,6 @@ extern Global* gl;
 extern Displays* display;
 X11_Wrapper x11 = X11_Wrapper();
 
-/*
-	TODO: 
-			- fix player texture bug
-				might have to do with Scenes::player being static
-*/
-
 int main() {
 	Enemy::init();
 	srand(time(NULL));
