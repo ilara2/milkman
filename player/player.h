@@ -36,6 +36,7 @@ public:
 	void display();
 	void bindTex();
 	void addBottles();
+	void resetBottles();
 	void refresh();
 	
 	void moveUp();

@@ -156,6 +156,11 @@ void Player::moveRight() {
 	fwd = true;
 }
 
+void Player::resetBottles() {
+	for (unsigned int i = 0; i < bottles.size(); i++)
+		bottles[i].reset();
+}
+
 Bottle* Player::nextBottle() {
 	size_t i;
 	for (i = 0; i < bottles.size(); i++) {

@@ -23,32 +23,34 @@ int Displays::checkKeys() {
 }
 
 void Displays::select(stages val) {
-	delete display;
 	switch(val) {
 		case err_stage:
 			printf("\n\tSomething when wrong\n\n");
 			break;
 		
 		case start:
+			delete display;
 			display = new Start;
 			break;
 
 		case lvl_1:
+			delete display;
 			display = new Level_1;
 			break;
 
 		case lvl_2:
+			delete display;
 			display = new Level_2;
 			break;
 
 		case credits:
 			printf("\nTODO:\n\tCredits\n\n");
-			display = new Start;
+			// display = new Start;
 			break;
 
 		case control:
 			printf("\nTODO:\n\tControl\n\n");
-			display = new Start;
+			// display = new Start;
 			break;
 
 		case exit_out:

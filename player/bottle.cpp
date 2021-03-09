@@ -99,3 +99,9 @@ void Bottle::throwBottle(attack_dir dir, int x, int y) {
 	active = true;
 }
 
+void Bottle::reset() {
+	active = false;
+	xpos = 0;
+	ypos = 0;
+}
+

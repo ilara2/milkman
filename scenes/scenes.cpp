@@ -13,6 +13,7 @@ Scenes::Scenes() {
 	enemies_num = 0;
 	player.bindTex();
 	player.addBottles();
+	player.resetBottles();
 }
 
 Scenes::~Scenes() {}

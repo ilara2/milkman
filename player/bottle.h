@@ -31,6 +31,7 @@ public:
 	void throwBottle(attack_dir, int, int);
 	void update();
 	void checkBounds();
+	void reset();
 };
 
 #endif
