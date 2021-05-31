@@ -88,11 +88,12 @@ int Start::checkKeys() {
 	bool up = (gl->keys[XK_Up] || gl->keys[XK_w]);
 	bool down = (gl->keys[XK_Down] || gl->keys[XK_s]);
 	bool space = (gl->keys[XK_space]) ? true : false;
-	if (gl->keys[XK_1] && flag) {
+	if (gl->keys[XK_1] && flag)
 		display->select(lvl_1);
-	} else if (gl->keys[XK_2] && flag) {
+	if (gl->keys[XK_2] && flag)
 		display->select(lvl_2);
-	}
+	if (gl->keys[XK_equal] && flag)
+		display->select(test);
 	if ( up && flag) {
 		selected = (selected + 2) % 3;
 		flag = false;

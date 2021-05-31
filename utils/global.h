@@ -2,7 +2,7 @@
 #ifndef GLOBAL_H_
 #define GLOBAL_H_
 
-enum stages {err_stage, start, lvl_1, lvl_2, credits, control, exit_out};
+enum stages {err_stage, start, lvl_1, lvl_2, credits, control, exit_out, test};
 enum attack_dir {err_shoot, up, down, left, right};
 
 class Global {

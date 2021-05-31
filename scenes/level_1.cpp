@@ -3,7 +3,7 @@
 #include "../utils/global.h"
 #include "displays.h"
 #include <stdio.h>
-#include <algorithm>
+// #include <algorithm>
 
 extern Global* gl;
 extern Displays* display;
@@ -76,6 +76,8 @@ int Level_1::checkKeys() {
 		display->select(start);
 	if (gl->keys[XK_2])
 		display->select(lvl_2);
+	if (gl->keys[XK_equal])
+		display->select(test);
 
 	return 0;
 }

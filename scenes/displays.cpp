@@ -5,6 +5,7 @@
 #include "start.h"
 #include "level_1.h"
 #include "level_2.h"
+#include "test.h"
 
 Displays Displays::instance;
 
@@ -56,6 +57,11 @@ void Displays::select(stages val) {
 		case exit_out:
 			printf("\nTODO:\n\tExit\n\n");
 			display = nullptr;
+			break;
+
+		case test:
+			delete display;
+			display = new Test;
 			break;
 
 		default:

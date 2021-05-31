@@ -51,7 +51,7 @@ int Level_2::checkKeys() {
 	if (gl->keys[XK_a]) player.moveLeft();
 	if (gl->keys[XK_d]) player.moveRight();
 
-	if ( !gl->keys[XK_w] && !gl->keys[XK_s] && !gl->keys[XK_a] && !gl->keys[XK_d] )
+	if (!gl->keys[XK_w] && !gl->keys[XK_s] && !gl->keys[XK_a] && !gl->keys[XK_d] )
 		player.mov = false;
 
 	if (gl->keys[XK_Up]) player.attack(up);
@@ -74,6 +74,8 @@ int Level_2::checkKeys() {
 		display->select(start);
 	if (gl->keys[XK_1])
 		display->select(lvl_1);
+	if (gl->keys[XK_equal])
+		display->select(test);
 
 	return 0;
 }
