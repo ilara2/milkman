@@ -12,6 +12,7 @@ Level_2::Level_2() {
 	printf("Lvl 2 in\n");
 	setForeground("./images/level2/levfore.png");
 	setBackground("./images/level2/levback.png");
+	enemies_num = 4;
 	refreshEnemies();
 	player.refresh();
 }

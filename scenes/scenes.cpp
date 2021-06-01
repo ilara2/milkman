@@ -53,10 +53,10 @@ void Scenes::drawScene(GLuint tex) {
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
-		glTexCoord2f(      0.2 * frame, 1);  glVertex2i (      0,       0);
-		glTexCoord2f(0.2 * frame + 0.2, 1);  glVertex2i (gl->xres,       0);
-		glTexCoord2f(0.2 * frame + 0.2, 0);  glVertex2i (gl->xres, gl->yres);
-		glTexCoord2f(      0.2 * frame, 0);  glVertex2i (      0, gl->yres);
+		glTexCoord2f(       0.2 * frame, 1);  glVertex2i (        0,       0);
+		glTexCoord2f( 0.2 * frame + 0.2, 1);  glVertex2i ( gl->xres,       0);
+		glTexCoord2f( 0.2 * frame + 0.2, 0);  glVertex2i ( gl->xres, gl->yres);
+		glTexCoord2f(       0.2 * frame, 0);  glVertex2i (        0, gl->yres);
 	glEnd();
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -67,8 +67,20 @@ void Scenes::sortEnemies() {
 	std::sort(enemies.begin(), enemies.end(), Enemy::cmp);
 }
 
+void Scenes::sortAIEnemies() {
+	std::sort(ai_enemies.begin(), ai_enemies.end(), AI_Enemy::cmp);
+}
+
 void Scenes::refreshEnemies() {
 	enemies.clear();
-	for (int i = 0; i < 4; i++) enemies.push_back(Enemy());
+	for (int i = 0; i < enemies_num; i++)
+		enemies.push_back(Enemy());
+	sortEnemies();
+}
+
+void Scenes::refreshAIEnemies() {
+	ai_enemies.clear();
+	for (int i = 0; i < enemies_num; i++)
+		ai_enemies.push_back(AI_Enemy());
 	sortEnemies();
 }
