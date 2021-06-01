@@ -83,5 +83,4 @@ void Scenes::refreshAIEnemies() {
 	for (int i = 0; i < enemies_num; i++)
 		ai_enemies.push_back(AI_Enemy());
 	sortEnemies();
-	// testing github
 }
