@@ -7,6 +7,7 @@
 #include <vector>
 #include "../player/player.h"
 #include "../enemy/enemy.h"
+#include "../enemy/ai_enemy.h"
 
 class Scenes {
 public:
@@ -19,6 +20,7 @@ public:
 
 	static Player player;
 	std::vector<Enemy> enemies;
+	std::vector<AI_Enemy> ai_enemies;
 
 	Scenes();
 	virtual ~Scenes();
@@ -26,7 +28,9 @@ public:
 	void setForeground(const char*);
 	void drawScene(GLuint);
 	void sortEnemies();
+	void sortAIEnemies();
 	void refreshEnemies();
+	void refreshAIEnemies();
 	virtual void on() = 0;
 	virtual int checkKeys() = 0;
 };

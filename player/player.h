@@ -38,6 +38,8 @@ public:
 	void addBottles();
 	void resetBottles();
 	void refresh();
+	// testing
+	void randpos();
 	
 	void moveUp();
 	void moveDown();

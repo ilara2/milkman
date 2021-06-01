@@ -183,3 +183,9 @@ void Player::showAttack() {
 	for (i = 0; i < bottles.size(); i++) 
 		bottles[i].display();
 }
+
+// testing
+void Player::randpos() {
+	xpos = rand() % gl->xres;
+	ypos = rand() % (gl->yres / 2);
+}

@@ -18,6 +18,7 @@ X11_Wrapper x11 = X11_Wrapper();
 
 int main() {
 	Enemy::init();
+	AI_Enemy::init();
 	srand(time(NULL));
 	clock_t begin;
 	double duration;
