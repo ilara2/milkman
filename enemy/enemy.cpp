@@ -51,24 +51,6 @@ Enemy::Enemy() {
 	frame = 0;
 }
 
-Enemy::Enemy(int _frame) {
-	frame = _frame;
-	size = gl->yres / 7;
-	step = size/ 12;
-	rand_diff = rand() % 4 + 11;
-
-	xpos = rand() % (gl->xres / 2) + gl->xres / 2;
-	ypos = rand() % (gl->yres / 2);
-
-	health = 2;
-	near = false;
-	stood = false;
-	alive =  true;
-	fwd = rand() % 2;
-	mov = false;
-	slice = 0;
-}
-
 void Enemy::refresh() {
 	size = gl->yres / 7;
 	step = size/ 12;
@@ -85,14 +67,6 @@ void Enemy::refresh() {
 	fwd = rand() % 2;
 	mov = false;
 	slice = 0;
-}
-
-void Enemy::move() {
-	// Network nn = Network(2, 4, 2);
-	if (rand() % 2) ypos++;
-	else ypos--;
-	if (rand() % 2) xpos++;
-	else xpos--;
 }
 
 void Enemy::Display() {

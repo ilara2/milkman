@@ -28,11 +28,10 @@ public:
 
 	// Methods
 	Enemy();
-	Enemy(int);
+
 	static void init();
 	void Display();
 	void refresh();
-	void move();
 	void standDraw();
 
 	static bool cmp(Enemy, Enemy);

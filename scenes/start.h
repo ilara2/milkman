@@ -12,7 +12,6 @@ public:
 	void on();
 	int checkKeys();
 	void initMenu();
-	void drawEnemy() {}
 	void showClouds();
 	void showTitle();
 	void showOptions();
