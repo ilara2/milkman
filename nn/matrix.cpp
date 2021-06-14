@@ -1,39 +1,71 @@
 
-
 #include "matrix.h"
+#define euler 2.71828
 
-
-int Matrix::cnt = 0;
+int Matrix::created = 0;
+int Matrix::destroyed = 0;
 
 // Constructors
 Matrix::Matrix() {
+    // printf("%d created\n", ++created);
     data = NULL;
     rows = 0;
     cols = 0;
 }
 
 Matrix::Matrix(int _rows, int _cols) {
+    // printf("%d created\n", ++created);
     rows = _rows;
     cols = _cols;
-    data = new float*[rows];
-
+    data = new double*[rows];
     for (int i = 0; i < rows; i++) {
-        data[i] = new float[cols];
+        data[i] = new double[cols];
     }
-
-    randomize();
-    // fill();
 }
 
-Matrix::Matrix(int arr[], int idx, int len) {
+Matrix& Matrix::operator=(const Matrix& obj) {
+    rows = obj.rows;
+    cols = obj.cols;
+    data = new double*[rows];
+    for (int i = 0; i < rows; i++) {
+        data[i] = new double[cols];
+        for (int j = 0; j < cols; j++) {
+            data[i][j] = obj.data[i][j];
+        }
+    }
+};
+
+Matrix::Matrix(const Matrix &obj) {
+    // printf("%d created\n", ++created);
+    rows = obj.rows;
+    cols = obj.cols;
+    data = new double*[rows];
+    for (int i = 0; i < rows; i++) {
+        data[i] = new double[cols];
+        for (int j = 0; j < cols; j++) {
+            data[i][j] = obj.data[i][j];
+        }
+    }
+}
+
+Matrix::Matrix(double arr[], int idx, int len) {
+    // printf("%d created\n", ++created);
     rows = len;
     cols = 1;
-    data = new float*[rows];
-
+    data = new double*[rows];
     for (int i = 0; i < rows; i++) {
-        data[i] = new float[cols];
-        data[i][0] = (float)arr[i+idx];
+        data[i] = new double[cols];
+        data[i][0] = (double)arr[i+idx];
     }
+}
+
+Matrix::~Matrix() {
+    // printf("\t%d destroyed\n", ++destroyed);
+    printf("\r");
+    for (int i = 0; i < rows; i++) {
+        delete [] data[i];
+    }
+    delete [] data;
 }
 
 //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //
@@ -48,7 +80,7 @@ Matrix Matrix::multiply(Matrix a, Matrix b) {
     for (int i = 0; i < a.rows; i++) {
         for (int j = 0; j < b.cols; j++) {
             // tmp.data[i][j] = ;
-            float sum = 0;
+            double sum = 0;
             for (int k = 0; k < a.cols; k++) {
                 sum += a.data[i][k] *b.data[k][j];
             }
@@ -59,7 +91,7 @@ Matrix Matrix::multiply(Matrix a, Matrix b) {
     return tmp;
 }
 
-Matrix Matrix::multiply(Matrix a, float b) {
+Matrix Matrix::multiply(Matrix a, double b) {
     Matrix tmp = Matrix(a.rows, a.cols);
 
     for (int i = 0; i < a.rows; i++) {
@@ -73,7 +105,7 @@ Matrix Matrix::multiply(Matrix a, float b) {
 Matrix Matrix::multiply_direct(Matrix a, Matrix b) {
     if (a.rows != b.rows || a.cols != b.cols) {
         printf("Matrix multiplication must match\n");
-        exit(0);        
+        exit(0);
     }
     Matrix tmp = Matrix(a.rows, a.cols);
 
@@ -100,7 +132,7 @@ Matrix Matrix::add(Matrix a, Matrix b) {
     return tmp;
 }
 
-Matrix Matrix::add(Matrix a, float b) {
+Matrix Matrix::add(Matrix a, double b) {
     Matrix tmp = Matrix(a.rows, a.cols);
     for (int i = 0; i < a.rows; i++) {
         for (int j = 0; j < a.cols; j++) {
@@ -125,7 +157,7 @@ Matrix Matrix::subtract(Matrix a, Matrix b) {
     return tmp;
 }
 
-Matrix Matrix::subtract(Matrix a, float b) {
+Matrix Matrix::subtract(Matrix a, double b) {
     Matrix tmp = Matrix(a.rows, a.cols);
     for (int i = 0; i < a.rows; i++) {
         for (int j = 0; j < a.cols; j++) {
@@ -135,7 +167,7 @@ Matrix Matrix::subtract(Matrix a, float b) {
     return tmp;
 }
 
-Matrix Matrix::subtract(float b, Matrix a) {
+Matrix Matrix::subtract(double b, Matrix a) {
     Matrix tmp = Matrix(a.rows, a.cols);
     for (int i = 0; i < a.rows; i++) {
         for (int j = 0; j < a.cols; j++) {
@@ -159,7 +191,7 @@ Matrix Matrix::sigmoid(Matrix a) {
     Matrix tmp = Matrix(a.rows, a.cols);
     for (int i = 0; i < a.rows; i++) {
         for (int j = 0; j < a.cols; j++) {
-            tmp.data[i][j] = 1 / (1 + pow(e, -1 * a.data[i][j] ) );
+            tmp.data[i][j] = 1 / (1 + pow(euler, -1 * a.data[i][j] ) );
         }
     }
     return tmp;
@@ -207,7 +239,7 @@ void Matrix::multiply(Matrix a) {
     Matrix tmp = Matrix(rows, a.cols);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < a.cols; j++) {
-            float sum = 0;
+            double sum = 0;
             for (int k = 0; k < a.cols; k++) {
                 sum += data[i][k] * a.data[k][j];
             }
@@ -218,7 +250,7 @@ void Matrix::multiply(Matrix a) {
     data = tmp.data;
 }
 
-void Matrix::multiply(float a) {
+void Matrix::multiply(double a) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             data[i][j] *= a;
@@ -249,36 +281,23 @@ void Matrix::add(Matrix a) {
 void Matrix::randomize() {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-        // for (int j = i; j < cols; j++) {
-            // data[i][j] = randFloat(-0.5, 0.5);
-            data[i][j] = randFloat(-1, 1);
-            // if (i != j) {
-            //  data[j][i] = -1 * data[i][j];
-            // }
-            // data[i][j] = 0.5;
+            data[i][j] = randdouble(-1, 1);
         }
     }
-}
-
-void Matrix::fill() {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            data[i][j] = 1.0 * ++cnt;
-        }
-    }   
 }
 
 void Matrix::print() {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            printf("%.5f\t", data[i][j]);
+            printf("%8.5f  ", data[i][j]);
         }
         printf("\n");
-    }   
+    }
+    printf("\n");
 }
 
-float Matrix::randFloat(float min, float max) {
-    float tmp = (float)rand() / RAND_MAX;
+double Matrix::randdouble(double min, double max) {
+    double tmp = (double)rand() / RAND_MAX;
     tmp *= (max - min);
     tmp += min;
     return tmp;
@@ -289,8 +308,8 @@ void Matrix::printDim() {
 }
 
 
-float Matrix::average() {
-    float sum = 0;
+double Matrix::average() {
+    double sum = 0;
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -300,5 +319,20 @@ float Matrix::average() {
     return sum/(rows*cols);
 }
 
-void Matrix::set(float arr[]) {
+double Matrix::sum() {
+    double ret = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            ret += data[i][j];
+        }
+    }
+    return ret;
+}
+
+void Matrix::set() {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < rows; j++) {
+            data[i][j] = 0;
+        }
+    }
 }
