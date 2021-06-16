@@ -289,7 +289,7 @@ void Matrix::randomize() {
 void Matrix::print() {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            printf("%8.5f  ", data[i][j]);
+            printf("%8.5f,", data[i][j]);
         }
         printf("\n");
     }
@@ -334,5 +334,28 @@ void Matrix::set() {
         for (int j = 0; j < rows; j++) {
             data[i][j] = 0;
         }
+    }
+}
+
+void Matrix::save(FILE* file) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            fprintf(file, "%8.5f,", data[i][j]);
+        }
+        fprintf(file, "\n");
+    }
+}
+
+void Matrix::load(FILE* file) {
+    if (!file) {
+        printf("Could not load file\n");
+        return;
+    }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            double* tmp;
+            fscanf(file, "%lf,", &data[i][j]);
+        }
+        fscanf(file, "\n");
     }
 }

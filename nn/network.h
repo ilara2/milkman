@@ -16,6 +16,8 @@ public:
     Matrix predict(double*);
     Matrix err(double**, int);
     void print();
+    void save(const char*);
+    void load(const char*);
 };
 
 #endif

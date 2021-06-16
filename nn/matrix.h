@@ -52,6 +52,9 @@ public:
     void print();
     double randdouble(double min, double max);
     void printDim();
+
+    void save(FILE*);
+    void load(FILE*);
 };
 
 #endif

@@ -43,9 +43,6 @@ void Network::feed(double** data, int n) {
          weights[j].add(delta);
       }
    }
-   // for (int i = 0; i < num_layers, i++) {
-   //    delete cal_weights[i];
-   // }
    delete [] cal_weights;
    delete [] sig;
    delete [] err;
@@ -55,11 +52,9 @@ void Network::print() {
    for (int i = 0; i < num_layers; i++) {
       weights[i].print();
    }
-   printf("\n");
    for (int i = 0; i < num_layers; i++) {
       bias[i].print();
    }
-   printf("\n\n");
 }
 
 Matrix Network::predict(double* data) {
@@ -77,8 +72,29 @@ Matrix Network::err(double** data, int n) {
    err.set();
    for (int i = 0; i < n; i++) {
       Matrix actual(data[i], npl[0], npl[num_layers]);
-      // actual.print();
       err.add(Matrix::abs(Matrix::subtract(predict(data[i]), actual)));
    }
+   float inverse = 1.0 / n;
+   err.multiply(inverse);
    return err;
+}
+
+
+void Network::save(const char* filename) {
+   FILE* file = fopen(filename, "w");
+   for (int i = 0; i < num_layers; i++) {
+      weights[i].save(file);
+      bias[i].save(file);
+   }
+   fclose(file);
+}
+
+void Network::load(const char* filename) {
+   FILE* file;
+   file = fopen(filename, "r");
+   for (int i = 0; i < num_layers; i++) {
+      weights[i].load(file);
+      bias[i].load(file);
+   }
+   fclose(file);
 }
