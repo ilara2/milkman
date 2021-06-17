@@ -9,7 +9,7 @@
 
 class Matrix {
 public:
-    double **data;
+    float **data;
     int rows, cols;
 
     static int created;
@@ -19,38 +19,34 @@ public:
     Matrix(int _rows, int _cols);
     Matrix(const Matrix&);
     Matrix& operator = (const Matrix&);
-    Matrix(double arr[], int idx, int len);
-
+    Matrix(float arr[], int idx, int len);
     ~Matrix();
 
-    static Matrix multiply(Matrix a, Matrix b);
-    static Matrix multiply(Matrix a, double b);
-    static Matrix multiply_direct(Matrix a, Matrix b);
+    void multiply_direct(Matrix &);
+    void multiply_direct(float);
+    static void multiply(Matrix &, Matrix &, Matrix &);
+    void multiply(Matrix &);
 
-    static Matrix add(Matrix a, Matrix b);
-    static Matrix add(Matrix a, double b);
-    static Matrix subtract(Matrix a, Matrix b);
-    static Matrix subtract(Matrix a, double b);
-    static Matrix subtract(double a, Matrix b);
+    static void add(Matrix &, Matrix &, Matrix &);
+    void add(Matrix &);
 
-    static Matrix transpose(Matrix a);
-    static Matrix sigmoid(Matrix a);
-    static Matrix d_sigmoid(Matrix a);
-    static Matrix abs(Matrix a);
+    static void subtract(Matrix &, Matrix &, Matrix &);
+    void subtract(Matrix &);
 
-    static Matrix copy(Matrix a);
+    static void transpose(Matrix &, Matrix &);
 
-    void multiply(Matrix a);
-    void multiply(double a);
-    void multiply_direct(Matrix a);
+    static void sigmoid(Matrix &, Matrix&);
+    Matrix sigmoid();
+    static void relu(Matrix *&, Matrix&);
+    static void softmax(Matrix *&, Matrix&);
+    static void abs(Matrix &, Matrix &);
+    Matrix abs();
+    Matrix round();
 
-    void add(Matrix a);
-    double average();
-    double sum();
-    void set();
+    float sum();
     void randomize();
     void print();
-    double randdouble(double min, double max);
+    float randfloat(float min, float max);
     void printDim();
 
     void save(FILE*);

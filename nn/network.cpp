@@ -2,10 +2,9 @@
 #include "network.h"
 
 Network::Network(const int* const nodes_per_layer, int len)
-   : npl(nodes_per_layer), num_layers(len-1), l_rate(0.1)
- {
-    weights = new Matrix[num_layers];
-    bias = new Matrix[num_layers];
+   : npl(nodes_per_layer), num_layers(len-1), l_rate(0.2) {
+   weights = new Matrix[num_layers];
+   bias = new Matrix[num_layers];
    for (int i = 0; i < num_layers; i++) {
       weights[i] = Matrix(npl[i+1], npl[i]);
       weights[i].randomize();
@@ -14,34 +13,42 @@ Network::Network(const int* const nodes_per_layer, int len)
    }
 }
 
-void Network::feed(double** data, int n) {
+Network::~Network() {
+   delete [] weights;
+   delete [] bias;
+}
+
+void Network::feed(float** data, int n) {
    Matrix *cal_weights = new Matrix[num_layers];
    Matrix *sig = new Matrix[num_layers];
    Matrix *err = new Matrix[num_layers];
    for (int i = 0; i < n; i++) {
       Matrix input(data[i], 0, npl[0]);
-      cal_weights[0] = Matrix::add(Matrix::multiply(weights[0], input), bias[0]);
-      sig[0] = Matrix::sigmoid(cal_weights[0]);
-
+      Matrix::multiply(cal_weights[0], weights[0], input);
+      cal_weights[0].add(bias[0]);
+      Matrix::sigmoid(sig[0], cal_weights[0]);
       for (int j = 1; j < num_layers; j++) {
-         cal_weights[j] = Matrix::add(Matrix::multiply(weights[j], sig[j-1]), bias[j]);
-         sig[j] = Matrix::sigmoid(cal_weights[j]);
+         Matrix::multiply(cal_weights[j], weights[j], sig[j-1]);
+         cal_weights[j].add(bias[j]);
+         Matrix::sigmoid(sig[j], cal_weights[j]);
       }
-
       Matrix actual(data[i], npl[0], npl[num_layers]);
-      err[num_layers-1] = Matrix::subtract(actual, sig[num_layers-1]);
+      Matrix::subtract(err[num_layers-1], actual, sig[num_layers-1]);
       for (int j = num_layers-2; j >= 0; j--) {
-         err[j] = Matrix::multiply(Matrix::transpose(weights[j+1]), err[j+1]);
+         Matrix tran;
+         Matrix::transpose(tran, weights[j+1]);
+         Matrix::multiply(err[j], tran, err[j+1]);
       }
-
       for (int j = num_layers-1; j >= 0; j--) {
-         Matrix gradient = Matrix::d_sigmoid(sig[j]);
+         Matrix gradient = sig[j].sigmoid();
          gradient.multiply_direct(err[j]);
-         gradient.multiply(l_rate);
-         bias[j] .add(gradient);
-         Matrix delta = Matrix::multiply(gradient, Matrix::transpose(cal_weights[j]));
+         gradient.multiply_direct(l_rate);
+         bias[j].add(gradient);
+         Matrix delta, tran;
+         Matrix::transpose(tran, cal_weights[j]);
+         Matrix::multiply(delta, gradient, tran);
          weights[j].add(delta);
-      }
+      }      
    }
    delete [] cal_weights;
    delete [] sig;
@@ -57,28 +64,32 @@ void Network::print() {
    }
 }
 
-Matrix Network::predict(double* data) {
-   Matrix input(data, 0, npl[0]);
-   input.print();
+Matrix* Network::predict(float* data) {
+   Matrix *input = new Matrix(data, 0, npl[0]);
+   input->print();
    for (int i = 0; i < num_layers; i++) {
-      input = Matrix::add(Matrix::multiply(weights[i], input), bias[i]);
-      input = Matrix::sigmoid(input);
+      Matrix t = *input;
+      Matrix::multiply(*input, weights[i], t);
+      input->add(bias[i]);
+      t = *input;
+      Matrix::sigmoid(*input, t);
    }
    return input;
 }
 
-Matrix Network::err(double** data, int n) {
+float Network::err(float** data, int n) {
    Matrix err(npl[num_layers], 1);
-   err.set();
    for (int i = 0; i < n; i++) {
       Matrix actual(data[i], npl[0], npl[num_layers]);
-      err.add(Matrix::abs(Matrix::subtract(predict(data[i]), actual)));
+      Matrix t;
+      Matrix::subtract(t, *predict(data[i]), actual);
+      t = t.abs();
+      err.add(t);
    }
-   float inverse = 1.0 / n;
-   err.multiply(inverse);
-   return err;
+   err.multiply_direct(1.0/n);
+   float err_sum = err.sum();
+   return err_sum;
 }
-
 
 void Network::save(const char* filename) {
    FILE* file = fopen(filename, "w");
@@ -98,3 +109,11 @@ void Network::load(const char* filename) {
    }
    fclose(file);
 }
+
+void Network::setLearningRate(float rate) {
+   l_rate = rate;
+}
+
+void Network::test() {
+}
+
