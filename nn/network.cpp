@@ -1,8 +1,10 @@
 
 #include "network.h"
 
-Network::Network(const int* const nodes_per_layer, int len)
-   : npl(nodes_per_layer), num_layers(len-1), l_rate(0.2) {
+Network::Network() {}
+
+Network::Network( int*  nodes_per_layer, int len)
+      : npl(nodes_per_layer), num_layers(len-1), l_rate(0.2) {
    weights = new Matrix[num_layers];
    bias = new Matrix[num_layers];
    for (int i = 0; i < num_layers; i++) {
@@ -23,32 +25,43 @@ void Network::feed(float** data, int n) {
    Matrix *sig = new Matrix[num_layers];
    Matrix *err = new Matrix[num_layers];
    for (int i = 0; i < n; i++) {
+      // FEED FORWARD
       Matrix input(data[i], 0, npl[0]);
-      Matrix::multiply(cal_weights[0], weights[0], input);
+      cal_weights[0] = Matrix::multiply(weights[0], input);
       cal_weights[0].add(bias[0]);
-      Matrix::sigmoid(sig[0], cal_weights[0]);
+      sig[0] = Matrix::sigmoid(cal_weights[0]);
       for (int j = 1; j < num_layers; j++) {
-         Matrix::multiply(cal_weights[j], weights[j], sig[j-1]);
+         cal_weights[j] = Matrix::multiply(weights[j], sig[j-1]);
          cal_weights[j].add(bias[j]);
-         Matrix::sigmoid(sig[j], cal_weights[j]);
+         sig[j] = Matrix::sigmoid(cal_weights[j]);
       }
+
+      // Error
       Matrix actual(data[i], npl[0], npl[num_layers]);
-      Matrix::subtract(err[num_layers-1], actual, sig[num_layers-1]);
-      for (int j = num_layers-2; j >= 0; j--) {
-         Matrix tran;
-         Matrix::transpose(tran, weights[j+1]);
-         Matrix::multiply(err[j], tran, err[j+1]);
+      err[num_layers - 1] = Matrix::subtract(actual, sig[num_layers - 1]);
+      for (int j = num_layers - 2; j >= 0; j--) {
+         Matrix tran = Matrix::transpose(weights[j+1]);
+         err[j] = Matrix::multiply(tran, err[j+1]);
       }
-      for (int j = num_layers-1; j >= 0; j--) {
-         Matrix gradient = sig[j].sigmoid();
+
+      // Gradient
+      for (int j = num_layers - 1; j >= 1; j--) {
+         Matrix gradient = sig[j].derive_sigmoid();
          gradient.multiply_direct(err[j]);
          gradient.multiply_direct(l_rate);
          bias[j].add(gradient);
-         Matrix delta, tran;
-         Matrix::transpose(tran, cal_weights[j]);
-         Matrix::multiply(delta, gradient, tran);
+         Matrix tran = Matrix::transpose(cal_weights[j-1]);
+         Matrix delta = Matrix::multiply(gradient, tran);
          weights[j].add(delta);
-      }      
+      }
+      Matrix gradient = sig[0].derive_sigmoid();
+      gradient.multiply_direct(err[0]);
+      gradient.multiply_direct(l_rate);
+      bias[0].add(gradient);
+      Matrix tran = Matrix::transpose(input);
+      Matrix delta = Matrix::multiply(gradient, tran);
+      weights[0].add(delta);
+
    }
    delete [] cal_weights;
    delete [] sig;
@@ -64,31 +77,31 @@ void Network::print() {
    }
 }
 
-Matrix* Network::predict(float* data) {
-   Matrix *input = new Matrix(data, 0, npl[0]);
-   input->print();
+Matrix Network::predict(float* data) {
+   Matrix input = Matrix(data, 0, npl[0]);
+   // input.print();
    for (int i = 0; i < num_layers; i++) {
-      Matrix t = *input;
-      Matrix::multiply(*input, weights[i], t);
-      input->add(bias[i]);
-      t = *input;
-      Matrix::sigmoid(*input, t);
+      input = Matrix::multiply(weights[i], input);
+      input.add(bias[i]);
+      input = Matrix::sigmoid(input);
    }
-   return input;
+   Matrix round = input.round();
+   // round.print();
+   return round;
 }
 
 float Network::err(float** data, int n) {
    Matrix err(npl[num_layers], 1);
    for (int i = 0; i < n; i++) {
       Matrix actual(data[i], npl[0], npl[num_layers]);
-      Matrix t;
-      Matrix::subtract(t, *predict(data[i]), actual);
-      t = t.abs();
-      err.add(t);
+      Matrix guess = predict(data[i]);
+      Matrix diff = Matrix::subtract(actual, guess);
+      Matrix diff_abs = diff.abs();
+      err.add(diff_abs);
    }
-   err.multiply_direct(1.0/n);
+   // err.multiply_direct(1.0/n);
    float err_sum = err.sum();
-   return err_sum;
+   return err_sum/n;
 }
 
 void Network::save(const char* filename) {
@@ -112,6 +125,13 @@ void Network::load(const char* filename) {
 
 void Network::setLearningRate(float rate) {
    l_rate = rate;
+}
+
+void Network::randomize() {
+   for (int i = 0; i < num_layers; i++) {
+      weights[i].randomize();
+      bias[i].randomize();
+   }
 }
 
 void Network::test() {

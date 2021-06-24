@@ -2,18 +2,13 @@
 #include "matrix.h"
 #define euler 2.71828
 
-int Matrix::created = 0;
-int Matrix::destroyed = 0;
-
 Matrix::Matrix() {
-    // printf("%d created\n", ++created);
-    data = NULL;
+    data = nullptr;
     rows = 0;
     cols = 0;
 }
 
 Matrix::Matrix(int _rows, int _cols) {
-    // printf("%d created\n", ++created);
     rows = _rows;
     cols = _cols;
     data = new float*[rows];
@@ -26,6 +21,7 @@ Matrix::Matrix(int _rows, int _cols) {
 }
 
 Matrix& Matrix::operator=(const Matrix& obj) {
+    clearData();
     rows = obj.rows;
     cols = obj.cols;
     data = new float*[rows];
@@ -35,10 +31,10 @@ Matrix& Matrix::operator=(const Matrix& obj) {
             data[i][j] = obj.data[i][j];
         }
     }
+    // return *this;
 };
 
 Matrix::Matrix(const Matrix &obj) {
-    // printf("%d created\n", ++created);
     rows = obj.rows;
     cols = obj.cols;
     data = new float*[rows];
@@ -51,7 +47,6 @@ Matrix::Matrix(const Matrix &obj) {
 }
 
 Matrix::Matrix(float arr[], int idx, int len) {
-    // printf("%d created\n", ++created);
     rows = len;
     cols = 1;
     data = new float*[rows];
@@ -62,38 +57,34 @@ Matrix::Matrix(float arr[], int idx, int len) {
 }
 
 Matrix::~Matrix() {
-    // printf("\t%d destroyed\n", ++destroyed);
-    printf("\r");
-    for (int i = 0; i < rows; i++) {
-        delete [] data[i];
-    }
-    delete [] data;
+    clearData();
 }
 
-void Matrix::multiply(Matrix &source, Matrix &a, Matrix &b) {
+Matrix Matrix::multiply(Matrix &a, Matrix &b) {
     if (a.cols != b.rows) {
-        printf("Error: void Matrix::multiply(Matrix *&source, Matrix &a, Matrix &b)\n"
+        printf("Error: Matrix Matrix::multiply(Matrix *&source, Matrix &a, Matrix &b)\n"
             "Dimensions do not match\n");
         exit(0);
     }
-    source = Matrix(a.rows, b.cols);
-    for (int i = 0; i < source.rows; i++) {
-        for (int j = 0; j < source.cols; j++) {
+    Matrix tmp(a.rows, b.cols);
+    for (int i = 0; i < a.rows; i++) {
+        for (int j = 0; j < b.cols; j++) {
             for (int k = 0; k < a.cols; k++) {
-                source.data[i][j] += a.data[i][k] * b.data[k][j];
+                tmp.data[i][j] += a.data[i][k] * b.data[k][j];
             }
         }
     }
+    return tmp;
 }
 
 void Matrix::multiply(Matrix &a) {
     if (cols != a.rows) {
-        printf("Error: void Matrix::multiply(Matrix &a)\n"
+        printf("Error: void Matrix::multiply(Matrix *&source, Matrix &a, Matrix &b)\n"
             "Dimensions do not match\n");
         exit(0);
     }
-    Matrix t = *this;
-    multiply(*this, t, a);
+    Matrix tmp = multiply(*this, a);
+    *this = tmp;
 }
 
 void Matrix::multiply_direct(Matrix &a) {
@@ -117,18 +108,19 @@ void Matrix::multiply_direct(float a) {
     }
 }
 
-void Matrix::add(Matrix &source, Matrix &a, Matrix &b) {
+Matrix Matrix::add(Matrix &a, Matrix &b) {
     if (a.rows != b.rows || a.cols != b.cols) {
         printf("Error: void Matrix::add(Matrix *&source, Matrix &a, Matrix &b)\n"
             "Dimensions do not match\n");
         exit(0);
-    }    
-    source = Matrix(a.rows, b.cols);
-    for (int i = 0; i < source.rows; i++) {
-        for (int j = 0; j < source.cols; j++) {
-            source.data[i][j] = a.data[i][j] + b.data[i][j];
+    }
+    Matrix tmp(a.rows, b.cols);
+    for (int i = 0; i < tmp.rows; i++) {
+        for (int j = 0; j < tmp.cols; j++) {
+            tmp.data[i][j] = a.data[i][j] + b.data[i][j];
         }
     }
+    return tmp;
 }
 
 void Matrix::add(Matrix &a) {
@@ -137,22 +129,23 @@ void Matrix::add(Matrix &a) {
             "Dimensions do not match\n");
         exit(0);
     }
-    Matrix t = *this;
-    add(*this, t, a);
+    Matrix tmp = add(*this, a);
+    *this = tmp;
 }
 
-void Matrix::subtract(Matrix &source, Matrix &a, Matrix &b) {
+Matrix Matrix::subtract(Matrix &a, Matrix &b) {
     if (a.rows != b.rows || a.cols != b.cols) {
         printf("Error: void Matrix::subtract(Matrix *&source, Matrix &a, Matrix &b)\n"
             "Dimensions do not match\n");
         exit(0);
-    }    
-    source = Matrix(a.rows, b.cols);
-    for (int i = 0; i < source.rows; i++) {
-        for (int j = 0; j < source.cols; j++) {
-            source.data[i][j] = a.data[i][j] - b.data[i][j];
+    }
+    Matrix tmp(a.rows, b.cols);
+    for (int i = 0; i < tmp.rows; i++) {
+        for (int j = 0; j < tmp.cols; j++) {
+            tmp.data[i][j] = a.data[i][j] - b.data[i][j];
         }
     }
+    return tmp;
 }
 
 void Matrix::subtract(Matrix &a) {
@@ -161,26 +154,38 @@ void Matrix::subtract(Matrix &a) {
             "Dimensions do not match\n");
         exit(0);
     }
-    Matrix t = *this;
-    subtract(*this, t, a);
+    Matrix tmp = subtract(*this, a);
+    *this = tmp;
 }
 
-void Matrix::transpose(Matrix &source, Matrix &a) {
-    source = Matrix(a.cols, a.rows);
-    for (int i = 0; i < a.cols; i++) {
-        for (int j = 0; j < a.rows; j++) {
-            source.data[i][j] = a.data[j][i];
+Matrix Matrix::transpose(Matrix &a) {
+    Matrix tmp(a.cols, a.rows);
+    for (int i = 0; i < tmp.rows; i++) {
+        for (int j = 0; j < tmp.cols; j++) {
+            tmp.data[i][j] = a.data[j][i];
         }
     }
+    return tmp;
 }
 
-void Matrix::sigmoid(Matrix &source, Matrix& a) {
-    source = Matrix(a.rows, a.cols);
+Matrix Matrix::sigmoid(Matrix& a) {
+    Matrix tmp(a.rows, a.cols);
     for (int i = 0; i < a.rows; i++) {
         for (int j = 0; j < a.cols; j++) {
-            source.data[i][j] = 1 / (1 + pow(euler, -1 * a.data[i][j] ) );
+            tmp.data[i][j] = 1 / (1 + pow(euler, -1 * a.data[i][j] ) );
         }
     }
+    return tmp;
+}
+
+Matrix Matrix::derive_sigmoid() {
+    Matrix t(rows, cols);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            t.data[i][j] = data[i][j] * (1 - data[i][j]);
+        }
+    }
+    return t;
 }
 
 void Matrix::relu(Matrix *&source, Matrix& a) {
@@ -196,7 +201,7 @@ void Matrix::softmax(Matrix *&source, Matrix& a) {
     if (a.cols != 1) {
         printf("Error: void Matrix::softmax(Matrix *&source, Matrix& a)\n"
             "Matrix must only have one column\n");
-        exit(0);        
+        exit(0);
     }
     source = new Matrix(a.rows, a.cols);
     float denom = 0;
@@ -208,23 +213,14 @@ void Matrix::softmax(Matrix *&source, Matrix& a) {
     }
 }
 
-Matrix Matrix::sigmoid() {
-    Matrix t(rows, cols);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            t.data[i][j] = data[i][j] * (1 - data[i][j]);
+Matrix Matrix::abs(Matrix &a) {
+    Matrix tmp(a.rows, a.cols);
+    for (int i = 0; i < tmp.rows; i++) {
+        for (int j = 0; j < tmp.cols; j++) {
+            tmp.data[i][j] = fabs(a.data[i][j]);
         }
     }
-    return t;
-}
-
-void Matrix::abs(Matrix &source, Matrix &a) {
-    source = Matrix(a.rows, a.cols);
-    for (int i = 0; i < a.rows; i++) {
-        for (int j = 0; j < a.cols; j++) {
-            source.data[i][j] = fabs(a.data[i][j]);
-        }
-    }
+    return tmp;
 }
 
 Matrix Matrix::abs() {
@@ -302,9 +298,18 @@ void Matrix::load(FILE* file) {
     }
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            float* tmp;
             fscanf(file, "%f,", &data[i][j]);
         }
         fscanf(file, "\n");
     }
+}
+
+void Matrix::clearData() {
+    if (data == nullptr) return;
+    for (int i = 0; i < rows; i++) {
+        delete [] data[i];
+        data[i] = 0;
+    }
+    delete [] data;
+    data = 0;
 }

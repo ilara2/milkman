@@ -12,9 +12,6 @@ public:
     float **data;
     int rows, cols;
 
-    static int created;
-    static int destroyed;
-
     Matrix();
     Matrix(int _rows, int _cols);
     Matrix(const Matrix&);
@@ -24,22 +21,23 @@ public:
 
     void multiply_direct(Matrix &);
     void multiply_direct(float);
-    static void multiply(Matrix &, Matrix &, Matrix &);
+    static Matrix multiply(Matrix &, Matrix &);
     void multiply(Matrix &);
 
-    static void add(Matrix &, Matrix &, Matrix &);
+    static Matrix add(Matrix &, Matrix &);
     void add(Matrix &);
 
-    static void subtract(Matrix &, Matrix &, Matrix &);
+    static Matrix subtract(Matrix &, Matrix &);
     void subtract(Matrix &);
 
-    static void transpose(Matrix &, Matrix &);
+    static Matrix transpose(Matrix &);
 
-    static void sigmoid(Matrix &, Matrix&);
-    Matrix sigmoid();
+    static Matrix sigmoid(Matrix &);
+    Matrix derive_sigmoid();
     static void relu(Matrix *&, Matrix&);
     static void softmax(Matrix *&, Matrix&);
-    static void abs(Matrix &, Matrix &);
+    
+    static Matrix abs(Matrix &);
     Matrix abs();
     Matrix round();
 
@@ -51,6 +49,7 @@ public:
 
     void save(FILE*);
     void load(FILE*);
+    void clearData();
 };
 
 #endif
